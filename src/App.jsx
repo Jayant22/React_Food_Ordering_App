@@ -1,9 +1,13 @@
-function App () {
-  return (
-    <div>
-      <h2>{"Let's get started!"}</h2>
-    </div>
-  )
-}
+import React from 'react';
 
-export default App
+import Header from './components/Layout/Header';
+
+const App = () => {
+  return (
+    <React.Fragment>
+      <Header />
+    </React.Fragment>
+  );
+};
+
+export default App;
