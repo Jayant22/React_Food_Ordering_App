@@ -8,3 +8,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>
 )
+
+// Get-ChildItem *.js -File -Recurse | Rename-Item -NewName { $_.Name -replace '.js','.jsx' }

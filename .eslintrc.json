@@ -19,7 +19,18 @@
   },
   "plugins": ["react"],
   "rules": {
-    "semi": [1, "always"]
+    "semi": [1, "always"],
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "never",
+        "exports": "never",
+        "functions": "never"
+      }
+    ],
+    "react/prop-types": ["off"]
   },
   "settings": {
     "react": {
