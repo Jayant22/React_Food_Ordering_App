@@ -1,36 +1,39 @@
+import { useEffect, useState } from 'react';
+
 import Card from '../UI/Card';
 import MealItem from './MealItems/MealItem';
 import classes from './AvailableMeals.module.css';
-
-const DUMMY_MEALS = [
-  {
-    id: 'm1',
-    name: 'Sushi',
-    description: 'Finest fish and veggies',
-    price: 22.99,
-  },
-  {
-    id: 'm2',
-    name: 'Schnitzel',
-    description: 'A german specialty!',
-    price: 16.5,
-  },
-  {
-    id: 'm3',
-    name: 'Barbecue Burger',
-    description: 'American, raw, meaty',
-    price: 12.99,
-  },
-  {
-    id: 'm4',
-    name: 'Green Bowl',
-    description: 'Healthy...and green...',
-    price: 18.99,
-  },
-];
+import useFetch from '../../hooks/useFetch';
 
 const AvailableMeals = () => {
-  const mealsList = DUMMY_MEALS.map((meal) => (
+  const [meals, setMeals] = useState([]);
+  const { isLoading, error, sendHttpRequest: fetchMealsRequest } = useFetch();
+
+  useEffect(() => {
+    const processMeals = (dataObj) => {
+      const loadedMeals = [];
+
+      for (const key in dataObj) {
+        loadedMeals.push({
+          id: key,
+          name: dataObj[key].name,
+          description: dataObj[key].description,
+          price: dataObj[key].price,
+        });
+      }
+      setMeals(loadedMeals);
+    };
+
+    fetchMealsRequest(
+      {
+        url: 'https://react--http-f960e-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json',
+      },
+      processMeals
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchMealsRequest]);
+
+  let content = meals.map((meal) => (
     <MealItem
       key={meal.id}
       id={meal.id}
@@ -40,10 +43,20 @@ const AvailableMeals = () => {
     />
   ));
 
+  if (meals.length <= 0) content = <p> No Meals Found... </p>;
+
+  if (error) {
+    content = <button onClick={fetchMealsRequest}>Try again</button>;
+  }
+
+  if (isLoading) {
+    content = 'Loading Meals...';
+  }
+
   return (
     <section className={classes.meals}>
       <Card>
-        <ul>{mealsList}</ul>
+        <ul>{content}</ul>
       </Card>
     </section>
   );
